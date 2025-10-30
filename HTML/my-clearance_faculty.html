@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Clearance | Faculty Dashboard</title>
+  <link rel="stylesheet" href="../CSS/my-clearance_faculty.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+</head>
+<body>
+  <div class="sidebar">
+    <div class="logo">
+      <img src="../CODE/LOGO.png" alt="SDCA Logo" 
+       style=
+       "width: 150px; 
+        height: auto;">
+      <h2>Faculty<br><span>Academic Clearance</span></h2>
+    </div>
+    <nav>
+      <ul>
+        <li><a href="dashboard.html">🏠 Dashboard</a></li>
+        <li class="active"><a href="#">📄 My Clearance</a></li>
+        <li><a href="#">🖋️ Signatories</a></li>
+        <li><a href="#">👤 Profile</a></li>
+      </ul>
+    </nav>
+    <button class="logout-btn"><i class="bi bi-box-arrow-right"></i> Logout</button>
+  </div>
+
+  <main class="main-content">
+    <h1>Clearance Requests</h1>
+    <p class="subtitle">Track and manage clearance requests</p>
+
+    <div class="stats">
+      <div class="stat-card">
+        <h3>Total Request</h3>
+        <p class="value">4</p>
+      </div>
+      <div class="stat-card">
+        <h3>Pending</h3>
+        <p class="value pending">2</p>
+      </div>
+      <div class="stat-card">
+        <h3>Approved</h3>
+        <p class="value approved">1</p>
+      </div>
+    </div>
+
+    <section class="clearance-list">
+      <h2>Clearance Request</h2>
+      <div class="clearance-card">
+        <div class="header">
+          <div>
+            <h3>🏛️ Dominican Learning Resource Center</h3>
+            <p>Request ID: <strong>CLR-001</strong></p>
+            <p>Submitted: <strong>2025-10-19</strong></p>
+          </div>
+          <span class="status pending">Pending</span>
+        </div>
+        <div class="content">
+          <h4>Required Documents</h4>
+          <p><span class="tag">Books Borrowed</span></p>
+          <p class="note">Note: Awaiting Dominican Learning Resource Center approval.</p>
+          <div class="actions">
+            <button class="btn-view"><i class="bi bi-eye"></i> View Details</button>
+            <button class="btn-download"><i class="bi bi-download"></i> Download</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

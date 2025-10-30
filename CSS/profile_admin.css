@@ -1,0 +1,165 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+body {
+  background-color: #f4f4f4;
+}
+
+.container {
+  display: flex;
+  height: 100vh;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 240px;
+  background-color: #fff;
+  border-right: 1px solid #ddd;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.logo {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.logo img {
+  width: 80px;
+  margin-bottom: 5px;
+}
+
+.logo h2 {
+  font-size: 18px;
+  color: #900;
+}
+
+.logo span {
+  font-weight: 400;
+  color: #666;
+}
+
+.menu {
+  display: flex;
+  flex-direction: column;
+}
+
+.menu-item {
+  padding: 12px 20px;
+  text-decoration: none;
+  color: #333;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-radius: 5px;
+  margin: 3px 10px;
+  transition: background 0.2s;
+}
+
+.menu-item:hover,
+.menu-item.active {
+  background-color: #b71c1c;
+  color: #fff;
+}
+
+.logout {
+  padding: 20px;
+  text-align: center;
+}
+
+.logout button {
+  background-color: #f8f8f8;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  padding: 8px 20px;
+  cursor: pointer;
+}
+
+.logout button i {
+  margin-right: 6px;
+}
+
+/* Main Content */
+.main-content {
+  flex: 1;
+  padding: 30px;
+}
+
+.main-content h2 {
+  color: #b71c1c;
+  margin-bottom: 5px;
+}
+
+.subtitle {
+  color: #777;
+  margin-bottom: 20px;
+}
+
+/* Profile Header */
+.profile-card {
+  background-color: #b71c1c;
+  color: #fff;
+  padding: 15px 20px;
+  border-radius: 6px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.profile-card .profile-name h3 {
+  font-weight: 600;
+}
+
+.profile-card .profile-name p {
+  font-size: 13px;
+}
+
+.role-badge {
+  background: #fff;
+  color: #b71c1c;
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 15px;
+  font-weight: 500;
+}
+
+/* Info Sections */
+.info-section {
+  display: flex;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.info-card {
+  background: #fff;
+  flex: 1;
+  padding: 15px 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.info-card.full {
+  flex: 1 1 100%;
+}
+
+.info-card h4 {
+  color: #444;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+.info-card p {
+  margin-bottom: 5px;
+  color: #333;
+  font-size: 14px;
+}
+
+.info-card i {
+  margin-right: 8px;
+  color: #b71c1c;
+}

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Signatories | Faculty Dashboard</title>
+  <link rel="stylesheet" href="../CSS/signatories_faculty.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+</head>
+<body>
+  <div class="sidebar">
+    <div class="logo">
+      <img src="CODE/LOGO.png" alt="SDCA Logo">
+      <h2>Faculty<br><span>Academic Clearance</span></h2>
+    </div>
+    <nav>
+      <ul>
+        <li><a href="dashboard.html">🏠 Dashboard</a></li>
+        <li><a href="my-clearance.html">📄 My Clearance</a></li>
+        <li class="active"><a href="#">🖋️ Signatories</a></li>
+        <li><a href="#">👤 Profile</a></li>
+      </ul>
+    </nav>
+    <button class="logout-btn"><i class="bi bi-box-arrow-right"></i> Logout</button>
+  </div>
+
+  <main class="main-content">
+    <h1>Clearance Sign Status by Department</h1>
+    <p class="subtitle">Track which departments have signed off on your clearance request</p>
+
+    <!-- Stats -->
+    <div class="stats">
+      <div class="stat-card">
+        <h3>Total Signatories</h3>
+        <p class="value">8</p>
+      </div>
+      <div class="stat-card">
+        <h3>Pending</h3>
+        <p class="value pending">2</p>
+      </div>
+      <div class="stat-card">
+        <h3>Signed</h3>
+        <p class="value approved">1</p>
+      </div>
+      <div class="stat-card">
+        <h3>Completion</h3>
+        <p class="value complete">40%</p>
+      </div>
+    </div>
+
+    <!-- Search -->
+    <div class="search-box">
+      <i class="bi bi-search"></i>
+      <input type="text" placeholder="Search by Department or signatory name" />
+    </div>
+
+    <!-- Department Section -->
+    <section class="department">
+      <div class="dept-header">
+        <h2>Office of the Registrar</h2>
+        <p><span>1 of 1 signed</span></p>
+      </div>
+
+      <div class="progress-bar">
+        <div class="progress" style="width: 100%;"></div>
+      </div>
+      <p class="percent">100%</p>
+
+      <div class="signatory-card">
+        <div class="signatory-info">
+          <p class="name"><i class="bi bi-check-circle-fill"></i> Ms. Jane De Leon</p>
+          <p class="role">Registrar</p>
+          <p class="email">janedeleon@sdca.edu.ph</p>
+        </div>
+        <div class="sign-status">
+          <span class="signed">Signed</span>
+          <p class="date">23/10/2025</p>
+        </div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
