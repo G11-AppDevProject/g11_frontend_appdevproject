@@ -1,0 +1,84 @@
+/* ===== UNIFIED ADMIN SIDEBAR ===== */
+.sidebar {
+  width: 240px;
+  background-color: #fff;
+  border-right: 1px solid #ddd;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100vh;
+  position: fixed;
+}
+
+.logo {
+  text-align: center;
+  padding: 20px 0;
+}
+
+.logo img {
+  width: 80px;
+  margin-bottom: 10px;
+}
+
+.logo h2 {
+  font-size: 18px;
+  color: #900;
+  margin-bottom: 5px;
+}
+
+.logo span {
+  font-weight: 400;
+  color: #666;
+}
+
+.menu {
+  display: flex;
+  flex-direction: column;
+}
+
+.menu-item {
+  padding: 12px 20px;
+  text-decoration: none;
+  color: #333;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-radius: 5px;
+  margin: 3px 10px;
+  transition: background 0.2s;
+}
+
+.menu-item:hover,
+.menu-item.active {
+  background-color: #b71c1c;
+  color: #fff;
+}
+
+.logout {
+  padding: 20px;
+  text-align: center;
+}
+
+.logout button {
+  width: 90%;
+  margin: 20px auto;
+  display: block;
+  background-color: #c62828;
+  border: none;
+  border-radius: 8px;
+  padding: 10px;
+  cursor: pointer;
+  font-size: 15px;
+  transition: background 0.2s ease-in-out;
+}
+
+.logout button:hover {
+  background-color: #a91e1e; /* darker red on hover */
+}
+
+
+/* Ensure content beside sidebar */
+.main-content {
+  margin-left: 240px;
+  padding: 30px;
+}

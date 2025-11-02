@@ -72,16 +72,22 @@ body {
 }
 
 .logout {
-  padding: 20px;
+  padding: 5px;
   text-align: center;
 }
 
 .logout button {
-  background-color: #f8f8f8;
-  border: 1px solid #ccc;
-  border-radius: 20px;
-  padding: 8px 20px;
+  width: 90%;
+  margin: 20px auto;
+  display: block;
+  background-color: #c62828;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px;
   cursor: pointer;
+  font-size: 15px;
+  transition: background 0.2s ease-in-out;
 }
 
 .logout button i {
