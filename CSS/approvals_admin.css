@@ -208,7 +208,42 @@ h1 {
   transition: 0.3s;
 }
 
+/* Year and Semester Section*/
 .view-details:hover {
   background: #c62828;
   color: #fff;
+}
+
+.filter-section {
+  display: flex;
+  gap: 2rem;
+  margin: 20px 0 30px 0;
+  align-items: center;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.filter-group label {
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.filter-group select {
+  width: 180px;
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 15px;
+  background-color: #fff;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+
+.filter-group select:focus {
+  border-color: #e74c3c; /* match your red accent */
+  outline: none;
 }

@@ -10,27 +10,28 @@
 </head>
 <body>
   <div class="sidebar">
-  <div class="logo">
-    <img src="../CODE/LOGO.png" alt="SDCA Logo" style="width: 150px; height: auto;">
-    <h2>Faculty<br><span>Academic Clearance</span></h2>
+    <div class="logo">
+      <img src="../CODE/LOGO.png" alt="SDCA Logo" style="width: 150px; height: auto;">
+      <h2>Faculty<br><span>Academic Clearance</span></h2>
+    </div>
+
+    <nav>
+      <ul>
+        <li><a href="dashboard_faculty.html">🏠 Dashboard</a></li>
+        <li class="active"><a href="my-clearance_faculty.html">🗂️ My Clearance</a></li>
+        <li><a href="signatories_faculty.html">✍️ Signatories</a></li>
+        <li><a href="profile_faculty.html">👤 Profile</a></li>
+      </ul>
+    </nav>
+
+    <button class="logout-btn"><i class="bi bi-box-arrow-right"></i> Logout</button>
   </div>
-
-  <nav>
-    <ul>
-      <li><a href="dashboard_faculty.html">🏠 Dashboard</a></li>
-      <li class="active"><a href="my-clearance_faculty.html">🗂️ My Clearance</a></li>
-      <li><a href="signatories_faculty.html">✍️ Signatories</a></li>
-      <li><a href="profile_faculty.html">👤 Profile</a></li>
-    </ul>
-  </nav>
-
-  <button class="logout-btn"><i class="bi bi-box-arrow-right"></i> Logout</button>
-</div>
 
   <main class="main-content">
     <h1>Clearance Requests</h1>
     <p class="subtitle">Track and manage clearance requests</p>
 
+    <!-- Stats -->
     <div class="stats">
       <div class="stat-card">
         <h3>Total Request</h3>
@@ -46,6 +47,30 @@
       </div>
     </div>
 
+    <!-- Filter Options -->
+    <div class="filter-section">
+      <div class="filter-group">
+        <label for="schoolYear">School Year</label>
+        <select id="schoolYear">
+          <option>Select School Year</option>
+          <option>2023-2024</option>
+          <option>2024-2025</option>
+          <option>2025-2026</option>
+          <option>2026-2027</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label for="semester">Semester</label>
+        <select id="semester">
+          <option>Select Semester</option>
+          <option>FIRST</option>
+          <option>SECOND</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Clearance List -->
     <section class="clearance-list">
       <h2>Clearance Request</h2>
       <div class="clearance-card">
