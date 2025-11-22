@@ -3,6 +3,7 @@ import 'dashboard_page.dart';
 import 'my_clearance_page.dart';
 import 'signatories_page.dart';
 import 'profile_page.dart';
+import 'faculty_view_details_ocr.dart'; // Import the FacultyViewDetailsOcrPage
 
 class FacultyViewDetailsPage extends StatefulWidget {
   const FacultyViewDetailsPage({super.key});
@@ -13,6 +14,7 @@ class FacultyViewDetailsPage extends StatefulWidget {
 
 class _FacultyViewDetailsPageState extends State<FacultyViewDetailsPage> {
   int selectedIndex = 1;
+  bool isDetailsActive = true;  // Track active tab (Details or OCR Scanner)
 
   @override
   Widget build(BuildContext context) {
@@ -125,7 +127,10 @@ class _FacultyViewDetailsPageState extends State<FacultyViewDetailsPage> {
       children: [
         // BACK BUTTON
         TextButton.icon(
-          onPressed: () => Navigator.pop(context),
+          onPressed: () =>             Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const MyClearancePage()),
+            ),
           icon: const Icon(Icons.arrow_back, color: Colors.black87),
           label: const Text("Back", style: TextStyle(color: Colors.black87)),
         ),
@@ -149,7 +154,6 @@ class _FacultyViewDetailsPageState extends State<FacultyViewDetailsPage> {
             ),
           ],
         ),
-
         const SizedBox(height: 4),
         const Text("Request ID: CLR-001",
             style: TextStyle(fontSize: 15, color: Colors.black54)),
@@ -182,25 +186,46 @@ class _FacultyViewDetailsPageState extends State<FacultyViewDetailsPage> {
   Widget _tabs() {
     return Row(
       children: [
-        _tabButton("Details", isActive: true),
+        _tabButton("Details", isActive: isDetailsActive),
         const SizedBox(width: 10),
-        _tabButton("OCR Scanner", isActive: false),
+        _tabButton("OCR Scanner", isActive: !isDetailsActive),
       ],
     );
   }
 
   Widget _tabButton(String label, {required bool isActive}) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 22),
-      decoration: BoxDecoration(
-        color: isActive ? Colors.black87 : Colors.grey.shade200,
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Text(
-        label,
-        style: TextStyle(
-          color: isActive ? Colors.white : Colors.black87,
-          fontWeight: FontWeight.bold,
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          if (label == "Details") {
+            isDetailsActive = true;
+            // Navigate to Faculty View Details when Details is clicked
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const FacultyViewDetailsPage()),
+            );
+          } else if (label == "OCR Scanner") {
+            isDetailsActive = false;
+            // Navigate to Faculty View Details OCR when OCR Scanner is clicked
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const FacultyViewDetailsOcrPage()),
+            );
+          }
+        });
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 22),
+        decoration: BoxDecoration(
+          color: isActive ? Colors.black87 : Colors.grey.shade200,
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Text(
+          label,
+          style: TextStyle(
+            color: isActive ? Colors.white : Colors.black87,
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ),
     );
