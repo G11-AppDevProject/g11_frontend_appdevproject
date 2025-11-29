@@ -34,5 +34,12 @@
 </head>
 <body>
   <script src="flutter_bootstrap.js" async></script>
+
+    <script>
+    document.addEventListener("dragover", e => e.preventDefault());
+    document.addEventListener("drop", e => e.preventDefault());
+  </script>
+  <!-- 🔥 STOP BROWSER FROM OPENING FILES ON DROP -->
+   
 </body>
 </html>
