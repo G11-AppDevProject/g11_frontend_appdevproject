@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:smart_clearance_app/screens/faculty/dashboard_page.dart';
 import 'package:smart_clearance_app/screens/admin/dashboard_page.dart';
+import 'package:smart_clearance_app/screens/admin/departments/registrar_approvals_page.dart';
 import '../../services/api_service.dart'; // Import the API service
+import 'package:smart_clearance_app/globals.dart' as G; 
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -175,23 +177,63 @@ class _LoginPageState extends State<LoginPage> {
                               borderRadius: BorderRadius.circular(12),
                             ),
                           ),
-                          onPressed: () async {
-                            final email = emailController.text;
-                            final password = passwordController.text;
-                            final role = selectedAccount.toLowerCase();
+              onPressed: () async {
+                final email = emailController.text.trim();
+                final password = passwordController.text.trim();
+                final role = selectedAccount.toLowerCase();  // faculty / admin
 
-                            final loginResp = await ApiService.login(email, password, role);
-                            
-                            if (loginResp["success"] == true) {
-                              if (role == "faculty") {
-                                Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const DashboardPage()));
-                              } else {
-                                Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const AdminDashboardPage()));
-                              }
-                            } else {
-                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(loginResp["message"] ?? "Login failed")));
-                            }
-                          },
+                final loginResp = await ApiService.login(email, password, role);
+
+                if (loginResp["success"] == true) {
+                  final user = loginResp["data"]["user"];
+                  final userRole = user["role"];
+
+                    // ================= FACULTY =================
+                    if (userRole == "faculty") {
+
+                      // 🟢 Save user details to globals
+                      G.currentFullName  = user["fullName"];
+                      G.currentEmail = user["email"];
+
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (_) => const DashboardPage()),
+                      );
+                      return;
+                      
+                    }
+
+
+                  // ================= ADMIN (ANY DEPARTMENT) =================
+                if (userRole.startsWith("admin-")) {
+
+                  // 🔥 Save department + email globally
+                  G.currentFullName   = user["fullName"]; 
+                  G.currentDepartment = userRole.replaceFirst("admin-", "");
+                  G.currentEmail = user["email"];   
+
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (_) => const AdminDashboardPage()),
+                  );
+                  return;
+                }
+
+
+                  // Fallback
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (_) => const AdminDashboardPage()),
+                  );
+                } 
+                else {
+                  ScaffoldMessenger.of(context)
+                    .showSnackBar(SnackBar(content: Text(loginResp["message"] ?? "Login failed")));
+                }
+              },
+
+
+
                           child: const Text("Sign in", style: TextStyle(color: Colors.white, fontSize: 16)),
                         ),
                       ),
