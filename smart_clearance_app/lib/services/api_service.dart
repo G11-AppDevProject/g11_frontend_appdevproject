@@ -256,5 +256,18 @@ static Future<Map<String, dynamic>> updateDocumentStatus({
   return jsonDecode(resp.body);
 }
 
+static Future updateRemarks(String requestId, String text) async {
+  final url = Uri.parse("$baseUrl/api/clearance/remarks/$requestId");
+
+  final res = await http.patch(
+    url,
+    headers: {"Content-Type": "application/json"},
+    body: jsonEncode({"remarks": text}),
+  );
+
+  print("🟢 REMARKS UPDATE RESULT => ${res.body}"); // debug print
+  return jsonDecode(res.body);
+}
+
 
 }

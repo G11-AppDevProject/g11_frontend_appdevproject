@@ -102,6 +102,15 @@ class _FacultyOCRScreenState extends State<FacultyOCRScreen> {
       return;
     }
 
+
+    // 🔥 File size restriction (1 MB)
+    if (selectedFileBytes!.lengthInBytes > 1024 * 1024) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("❗ File exceeds 1MB. OCR cannot read large documents.")),
+      );
+      return;
+    }
+    
     setState(() => isLoading = true);
 
     try {
@@ -146,7 +155,29 @@ class _FacultyOCRScreenState extends State<FacultyOCRScreen> {
                 const SizedBox(height: 15),
 
                 Text("\n📑 Validity Analysis", style: TextStyle(fontWeight: FontWeight.bold)),
-                Text("Confidence Score: ${resultCheck["score"]}%"),
+                // ================= RESULT UI WITH PROGRESS BAR =================
+                Text("\n📊 Confidence Score", style: TextStyle(fontWeight: FontWeight.bold)),
+                SizedBox(height: 8),
+                LinearProgressIndicator(
+                  value: resultCheck["score"] / 100, // converts % to 0-1
+                  backgroundColor: Colors.red.shade200,
+                  valueColor: AlwaysStoppedAnimation(
+                    resultCheck["score"] >= 70 ? Colors.green :
+                    resultCheck["score"] >= 40 ? Colors.orange :
+                    Colors.red,
+                  ),
+                ),
+                SizedBox(height: 10),
+                Text(
+                  "${resultCheck["score"]}% Validity",
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                    color: resultCheck["score"] >= 70 ? Colors.green :
+                          resultCheck["score"] >= 40 ? Colors.orange :
+                          Colors.red,
+                  ),
+                ),
                 Text("Status: ${resultCheck["remark"]}", style: TextStyle(fontSize: 16)),
 
                 const SizedBox(height: 10),

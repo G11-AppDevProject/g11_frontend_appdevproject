@@ -425,12 +425,58 @@ class _FacultyRequestDetailsPageState extends State<FacultyRequestDetailsPage> {
                         ],
                       ),
                     ),
+                    const SizedBox(height: 25),
+
+                    // ===================== REMARKS VIEW ONLY =====================
+                    Container(
+                      padding: const EdgeInsets.all(20),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: Colors.grey.shade200),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black12,
+                            blurRadius: 6,
+                            offset: Offset(0, 3),
+                          )
+                        ],
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+
+                          const Text(
+                            "Remarks",
+                            style: TextStyle(
+                              fontSize: 17,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.black87,
+                            ),
+                          ),
+
+                          const SizedBox(height: 10),
+
+                          Text(
+                            data?["remarks"]?.toString().isNotEmpty == true
+                                ? data!["remarks"]
+                                : "No remarks yet...",
+                            style: const TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.black87,
+                              height: 1.4,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
               ),
-      ),
-    );
-  }
+            ),
+          );
+        }
 
   BoxDecoration _box() => BoxDecoration(
         color: Colors.white,

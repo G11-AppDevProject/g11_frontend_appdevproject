@@ -3,6 +3,8 @@ import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../services/api_service.dart';
 
+import '../../screens/faculty/faculty_ocr_screen.dart';
+
 class AdminRequestDetailsPage extends StatefulWidget {
   final String requestId;
 
@@ -119,8 +121,11 @@ class _AdminRequestDetailsPageState extends State<AdminRequestDetailsPage> {
 
                 OutlinedButton(
                   onPressed: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text("OCR Scanner Coming Soon 👀")),
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => FacultyOCRScreen(requestId: widget.requestId),
+                      ),
                     );
                   },
                   style: OutlinedButton.styleFrom(
@@ -157,15 +162,78 @@ class _AdminRequestDetailsPageState extends State<AdminRequestDetailsPage> {
                   ),
 
                   const SizedBox(height: 30),
-
                   // ================= REQUIRED DOCUMENTS =================
                   documentSection(),
 
-                ]),
-              ),
-      ),
-    );
-  }
+                  const SizedBox(height: 30),
+
+                  // ================= REMARKS (Soft White UI + Light Blue Button) =================
+                Container(
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(12),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black12.withOpacity(0.08),
+                        blurRadius: 6,
+                        offset: const Offset(0, 3),
+                      )
+                    ],
+                    border: Border.all(color: Colors.grey.shade200),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text(
+                            "Remarks",
+                            style: TextStyle(
+                              fontSize: 17,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.black87,
+                            ),
+                          ),
+
+                          // 🔷 Light Blue Add/Edit Remarks Button
+                          ElevatedButton(
+                            onPressed: () => editRemarksDialog(),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.blue, // light blue
+                              foregroundColor: const Color.fromARGB(255, 0, 0, 0),
+                              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                            ),
+                            child: const Text("Add / Edit Remarks"),
+                          ),
+                        ],
+                      ),
+
+                      const SizedBox(height: 12),
+
+                      Text(
+                        data?["remarks"]?.toString().isNotEmpty == true
+                            ? data!["remarks"]
+                            : "No remarks yet...",
+                        style: const TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.black87,
+                          height: 1.4,
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+
+              ]),
+            ),
+          ),
+        );
+      }
 
   // =============================================================
   // DOCUMENT LIST
@@ -186,7 +254,7 @@ class _AdminRequestDetailsPageState extends State<AdminRequestDetailsPage> {
 
             ElevatedButton(
               onPressed: showAddRequiredDocDialog,
-              style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.blue, foregroundColor: Colors.black),
               child: const Text("Insert for Faculty"),
             )
           ],
@@ -318,6 +386,34 @@ class _AdminRequestDetailsPageState extends State<AdminRequestDetailsPage> {
       ),
     );
   }
+
+void editRemarksDialog() {
+  final input = TextEditingController(text: data?["remarks"]);
+
+  showDialog(
+    context: context,
+    builder: (_) => AlertDialog(
+      title: const Text("Add Remarks"),
+      content: TextField(
+        controller: input,
+        maxLines: 4,
+        decoration: const InputDecoration(hintText: "Enter remarks..."),
+      ),
+      actions: [
+        TextButton(onPressed: () => Navigator.pop(context), child: const Text("Cancel")),
+
+        ElevatedButton(
+          onPressed: () async {
+            await ApiService.updateRemarks(widget.requestId, input.text.trim());
+            Navigator.pop(context);
+            loadRequestDetails(); // refresh UI
+          },
+          child: const Text("Save"),
+        )
+      ],
+    ),
+  );
+}
 
   // UI COMPONENTS
   Widget field(String title, value) => Column(crossAxisAlignment: CrossAxisAlignment.start, children: [

@@ -177,63 +177,62 @@ class _LoginPageState extends State<LoginPage> {
                               borderRadius: BorderRadius.circular(12),
                             ),
                           ),
-              onPressed: () async {
-                final email = emailController.text.trim();
-                final password = passwordController.text.trim();
-                final role = selectedAccount.toLowerCase();  // faculty / admin
 
-                final loginResp = await ApiService.login(email, password, role);
+                              onPressed: () async {
+                                final email = emailController.text.trim();
+                                final password = passwordController.text.trim();
+                                final selectedRole = selectedAccount.toLowerCase(); // faculty / admin
 
-                if (loginResp["success"] == true) {
-                  final user = loginResp["data"]["user"];
-                  final userRole = user["role"];
+                                final loginResp = await ApiService.login(email, password, selectedRole);
 
-                    // ================= FACULTY =================
-                    if (userRole == "faculty") {
+                                if (loginResp["success"] == true) {
+                                  final user = loginResp["data"]["user"];
+                                  final userRole = user["role"]; // "faculty" or "admin-registrar"
 
-                      // 🟢 Save user details to globals
-                      G.currentFullName  = user["fullName"];
-                      G.currentEmail = user["email"];
+                                  // ================= FACULTY LOGIN =================
+                                  if (selectedRole == "faculty") {
+                                    if (userRole != "faculty") {
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        const SnackBar(content: Text("❌ This is not a faculty account")),
+                                      );
+                                      return;
+                                    }
 
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (_) => const DashboardPage()),
-                      );
-                      return;
-                      
-                    }
+                                    G.currentFullName = user["fullName"];
+                                    G.currentEmail = user["email"];
 
+                                    Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(builder: (_) => const DashboardPage()),
+                                    );
+                                    return;
+                                  }
 
-                  // ================= ADMIN (ANY DEPARTMENT) =================
-                if (userRole.startsWith("admin-")) {
+                                  // ================= ADMIN LOGIN =================
+                                  if (selectedRole == "admin") {
+                                    if (!userRole.startsWith("admin-")) {
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        const SnackBar(content: Text("❌ Faculty accounts cannot log in as Admin")),
+                                      );
+                                      return;
+                                    }
 
-                  // 🔥 Save department + email globally
-                  G.currentFullName   = user["fullName"]; 
-                  G.currentDepartment = userRole.replaceFirst("admin-", "");
-                  G.currentEmail = user["email"];   
+                                    G.currentFullName = user["fullName"];
+                                    G.currentEmail = user["email"];
+                                    G.currentDepartment = userRole.replaceFirst("admin-", ""); // 🔥 keeps department
 
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (_) => const AdminDashboardPage()),
-                  );
-                  return;
-                }
+                                    Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(builder: (_) => const AdminDashboardPage()),
+                                    );
+                                    return;
+                                  }
+                                }
 
-
-                  // Fallback
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (_) => const AdminDashboardPage()),
-                  );
-                } 
-                else {
-                  ScaffoldMessenger.of(context)
-                    .showSnackBar(SnackBar(content: Text(loginResp["message"] ?? "Login failed")));
-                }
-              },
-
-
-
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(content: Text(loginResp["message"] ?? "Login failed")),
+                                );
+                              },
                           child: const Text("Sign in", style: TextStyle(color: Colors.white, fontSize: 16)),
                         ),
                       ),
