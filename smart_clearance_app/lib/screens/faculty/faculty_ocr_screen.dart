@@ -92,6 +92,113 @@ class _FacultyOCRScreenState extends State<FacultyOCRScreen> {
   };
 }
 
+// ====================== LIBRARY CLEARANCE VALIDATION ======================
+Map<String, dynamic> validateLibraryClearance(String text) {
+  text = text.toLowerCase();
+
+  int score = 0;
+  List<String> missing = [];
+
+  // Title
+  bool hasTitle = text.contains("library clearance") || text.contains("clearance form");
+  if (hasTitle) score += 20; else missing.add("Missing Library Clearance title");
+
+  // Borrowed items section
+  bool hasBorrow = text.contains("borrowed") || text.contains("returned") || text.contains("books");
+  if (hasBorrow) score += 30; else missing.add("Missing borrowed/returned books section");
+
+  // Faculty identity
+  bool hasIdentity = text.contains("name") || text.contains("faculty");
+  if (hasIdentity) score += 20; else missing.add("Missing faculty name");
+
+  // Approval/signature
+  bool hasSignature = text.contains("librarian") || text.contains("approved") || text.contains("signature");
+  if (hasSignature) score += 30; else missing.add("Missing librarian approval/signature");
+
+  if (score == 0) {
+    return {
+      "score": 0,
+      "remark": "❗ Not readable as Library Clearance, \n(More document types coming soon",
+      "missing": missing,
+    };
+  }
+
+  String remark;
+  if (score >= 70) remark = "✅ Valid Library Clearance Format";
+  else if (score >= 40) remark = "⚠ Partially Valid — Needs Review";
+  else remark = "❌ Weak — Incomplete Structure";
+
+  return {"score": score, "remark": remark, "missing": missing};
+}
+
+// ====================== BORROWED BOOKS RETURN SLIP VALIDATION ======================
+Map<String, dynamic> validateBorrowedBooksSlip(String text) {
+  text = text.toLowerCase();
+  int score = 0;
+  List<String> missing = [];
+
+  // ========================= TITLE CHECK =========================
+  bool hasTitle =
+      text.contains("borrowed books return slip") ||
+      text.contains("return slip") ||
+      text.contains("dlrc — borrowed books");
+
+  if (hasTitle) score += 30;
+  else missing.add("Missing official 'Borrowed Books Return Slip' title");
+
+
+  // ========================= BOOK LIST CHECK =========================
+  // Require ACTUAL book-like entries (title/author/isbn)
+  bool hasBookList = RegExp(
+    r"(isbn|call number|author|title:|book title|module|copy no\.|#\d+)"
+  ).hasMatch(text);
+
+  if (hasBookList) score += 30;
+  else missing.add("Missing list of returned items (ISBN, title, author, or call number)");
+
+
+  // ========================= DATE CHECK =========================
+  // Detect real date formats (e.g. September 1, 2025 or 09/01/25)
+  bool hasDate = RegExp(
+    r"(date\s*[:\-]\s*\w+|\b\d{1,2}\/\d{1,2}\/\d{2,4}\b|\b\d{4}\b)"
+  ).hasMatch(text);
+
+  if (hasDate) score += 20;
+  else missing.add("Missing official return date");
+
+
+  // ========================= SIGNATURE / APPROVAL =========================
+  bool hasSignature = RegExp(
+    r"(librarian|library staff|verified by|checked by|approved by|signature)"
+  ).hasMatch(text);
+
+  if (hasSignature) score += 20;
+  else missing.add("Missing librarian approval or signature");
+
+
+  // ========================= ZERO SCORE CASE =========================
+  if (score == 0) {
+    return {
+      "score": 0,
+      "remark": "❗ Not readable as Borrowed Books Return Slip.",
+      "missing": missing,
+    };
+  }
+
+  // ========================= FINAL REMARK =========================
+  String remark;
+  if (score >= 70) remark = "✅ Valid Borrowed Books Return Slip";
+  else if (score >= 40) remark = "⚠ Needs Review";
+  else remark = "❌ Incomplete Format";
+
+  return {"score": score, "remark": remark, "missing": missing};
+}
+
+
+
+
+
+
 
   // ========================= OCR PROCESS =========================
   Future<void> processOCR() async {
@@ -137,7 +244,22 @@ class _FacultyOCRScreenState extends State<FacultyOCRScreen> {
       String extracted = data["ParsedResults"]?[0]?["ParsedText"] ?? "No text detected.";
 
       // 🔥 VALIDATE OCR RESULT
-      final resultCheck = validateFinancialClearance(extracted);
+      Map<String, dynamic> resultCheck;
+
+      if (selectedDocType == "Financial Clearance") {
+        resultCheck = validateFinancialClearance(extracted);
+      } else if (selectedDocType == "Library Clearance Form") {
+        resultCheck = validateLibraryClearance(extracted);
+      } else if (selectedDocType == "Borrowed Books Return Slip") {
+        resultCheck = validateBorrowedBooksSlip(extracted);
+      } else {
+        resultCheck = {
+          "score": 0,
+          "remark": "❗ No validation rules for this document yet.",
+          "missing": ["Document type not supported"],
+        };
+      }
+
       String missingFields =
           resultCheck["missing"].isEmpty ? "None ✓" : resultCheck["missing"].join("\n• ");
 
@@ -233,7 +355,10 @@ class _FacultyOCRScreenState extends State<FacultyOCRScreen> {
               Text("Select Document Type", style: TextStyle(fontWeight: FontWeight.bold)),
               DropdownButton<String>(
                 value: selectedDocType,
-                items: ["Financial Clearance"].map((v) => DropdownMenuItem(value: v, child: Text(v))).toList(),
+                items: ["Financial Clearance",
+                        "Library Clearance Form",
+                        "Borrowed Books Return Slip",]
+                        .map((v) => DropdownMenuItem(value: v, child: Text(v))).toList(),
                 onChanged: (v)=> setState(() => selectedDocType = v!),
               ),
 

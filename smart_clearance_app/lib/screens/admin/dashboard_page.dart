@@ -99,20 +99,27 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
           // =============================== APPROVALS ROUTER ===============================
           if (index == 1) {
             final d = G.currentDepartment.toLowerCase();
+            print("=== DEBUG DEPARTMENT CHECK ===");
+            print("RAW: '${G.currentDepartment}'");
+            print("LOWER: '${G.currentDepartment.toLowerCase()}'");
+            print("TRIMMED: '${G.currentDepartment.toLowerCase().trim()}'");
+            print("MATCH property office? ${G.currentDepartment.toLowerCase().trim() == "property office"}");
+            print("LENGTH: ${G.currentDepartment.toLowerCase().trim().length}");
+            print("EXPECTED LENGTH: ${"property office".length}");
 
                 if (d == "registrar") Navigator.push(context, MaterialPageRoute(builder: (_) => const RegistrarApprovalsPage()));
             else if (d == "accounting" || d == "accounting office") Navigator.push(context, MaterialPageRoute(builder: (_) => const AccountingApprovalsPage()));
             else if (d == "dean" || d == "dean office") Navigator.push(context, MaterialPageRoute(builder: (_) => const DeanApprovalsPage()));
             else if (d == "treasury" || d == "treasury office") Navigator.push(context, MaterialPageRoute(builder: (_) => const TreasuryApprovalsPage()));
-            else if (d == "property management office") Navigator.push(context, MaterialPageRoute(builder: (_) => const PropertyApprovalsPage()));
+            else if (d == "property" || d == "property office" || d == "property management office") Navigator.push(context, MaterialPageRoute(builder: (_) => const PropertyApprovalsPage()));
             else if (d == "laboratory") Navigator.push(context, MaterialPageRoute(builder: (_) => const LaboratoryApprovalsPage()));
             else if (d == "clinic") Navigator.push(context, MaterialPageRoute(builder: (_) => const ClinicApprovalsPage()));
             else if (d == "library") Navigator.push(context, MaterialPageRoute(builder: (_) => const LibraryApprovalsPage()));
-            else if (d == "human resource office") Navigator.push(context, MaterialPageRoute(builder: (_) => const HRApprovalsPage()));
-            else if (d == "program chair") Navigator.push(context, MaterialPageRoute(builder: (_) => const ChairApprovalsPage()));
-            else if (d == "office of the vice president as research") Navigator.push(context, MaterialPageRoute(builder: (_) => const VPResearchApprovalsPage()));
+            else if (d == "hr" || d == "human resource office") Navigator.push(context, MaterialPageRoute(builder: (_) => const HRApprovalsPage()));
+            else if (d == "chair" || d == "program chair") Navigator.push(context, MaterialPageRoute(builder: (_) => const ChairApprovalsPage()));
+            else if (d == "vp-research" || d == "office of the vice president as research") Navigator.push(context, MaterialPageRoute(builder: (_) => const VPResearchApprovalsPage()));
             else if (d == "ict") Navigator.push(context, MaterialPageRoute(builder: (_) => const ICTApprovalsPage()));
-            else if (d == "community extension service office") Navigator.push(context, MaterialPageRoute(builder: (_) => const CESOApprovalsPage()));
+            else if (d == "ceso" || d == "community extension service office") Navigator.push(context, MaterialPageRoute(builder: (_) => const CESOApprovalsPage()));
 
             else {
               ScaffoldMessenger.of(context).showSnackBar(
@@ -248,19 +255,20 @@ Widget _clearanceCard() {
           onPressed: () {
             final d = G.currentDepartment.toLowerCase(); // normalized  
 
+
             if (d == "registrar") Navigator.push(context, MaterialPageRoute(builder: (_) => const RegistrarApprovalsPage()));
             else if (d == "accounting" || d == "accounting office") Navigator.push(context, MaterialPageRoute(builder: (_) => const AccountingApprovalsPage()));
             else if (d == "dean" || d == "dean office") Navigator.push(context, MaterialPageRoute(builder: (_) => const DeanApprovalsPage()));
             else if (d == "treasury" || d == "treasury office") Navigator.push(context, MaterialPageRoute(builder: (_) => const TreasuryApprovalsPage()));
-            else if (d == "property management office") Navigator.push(context, MaterialPageRoute(builder: (_) => const PropertyApprovalsPage()));
+            else if (d == "property" || d == "property office" || d == "property management office") Navigator.push(context, MaterialPageRoute(builder: (_) => const PropertyApprovalsPage()));
             else if (d == "laboratory") Navigator.push(context, MaterialPageRoute(builder: (_) => const LaboratoryApprovalsPage()));
             else if (d == "clinic") Navigator.push(context, MaterialPageRoute(builder: (_) => const ClinicApprovalsPage()));
             else if (d == "library") Navigator.push(context, MaterialPageRoute(builder: (_) => const LibraryApprovalsPage()));
-            else if (d == "human resource office") Navigator.push(context, MaterialPageRoute(builder: (_) => const HRApprovalsPage()));
-            else if (d == "program chair") Navigator.push(context, MaterialPageRoute(builder: (_) => const ChairApprovalsPage()));
-            else if (d == "office of the vice president as research") Navigator.push(context, MaterialPageRoute(builder: (_) => const VPResearchApprovalsPage()));
+            else if (d == "hr" || d == "human resource office") Navigator.push(context, MaterialPageRoute(builder: (_) => const HRApprovalsPage()));
+            else if (d == "chair" || d == "program chair") Navigator.push(context, MaterialPageRoute(builder: (_) => const ChairApprovalsPage()));
+            else if (d == "vp-research" || d == "office of the vice president as research") Navigator.push(context, MaterialPageRoute(builder: (_) => const VPResearchApprovalsPage()));
             else if (d == "ict") Navigator.push(context, MaterialPageRoute(builder: (_) => const ICTApprovalsPage()));
-            else if (d == "community extension service office") Navigator.push(context, MaterialPageRoute(builder: (_) => const CESOApprovalsPage()));
+            else if (d == "ceso" || d == "community extension service office") Navigator.push(context, MaterialPageRoute(builder: (_) => const CESOApprovalsPage()));
 
             else {
               ScaffoldMessenger.of(context).showSnackBar(

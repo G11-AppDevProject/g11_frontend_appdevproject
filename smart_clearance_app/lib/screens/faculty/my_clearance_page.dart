@@ -300,9 +300,19 @@ void loadData() async {
             style:ElevatedButton.styleFrom(backgroundColor:Colors.orange),
             child:const Text("Resubmit")
           ),
-
-        if(status=="Approved")
-          OutlinedButton(onPressed:(){}, child:const Text("Download Clearance")),
+          
+            if (status == "Approved")
+              OutlinedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => FacultyRequestDetailsPage(requestId: id!), 
+                    ),
+                  );
+                },
+                child: const Text("View Details"),
+              ),
       ]),
     );
   }
