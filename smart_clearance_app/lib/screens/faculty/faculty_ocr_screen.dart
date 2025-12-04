@@ -194,10 +194,275 @@ Map<String, dynamic> validateBorrowedBooksSlip(String text) {
   return {"score": score, "remark": remark, "missing": missing};
 }
 
+// ====================== PMO EQUIPMENT RETURN VALIDATION ======================
+Map<String, dynamic> validateEquipmentReturn(String text) {
+  text = text.toLowerCase();
 
+  int score = 0;
+  List<String> missing = [];
 
+  // ===== TITLE CHECK =====
+  bool hasTitle =
+      text.contains("equipment return") ||
+      text.contains("asset accountability") ||
+      text.contains("property office") ||
+      text.contains("pmo clearance");
 
+  if (hasTitle) score += 25;
+  else missing.add("Missing Equipment/Asset Return title");
 
+  // ===== ITEM LIST CHECK =====
+  bool hasItems = RegExp(
+    r"(item|equipment|serial|unit|model|property|description)"
+  ).hasMatch(text);
+
+  if (hasItems) score += 25;
+  else missing.add("Missing item/equipment details");
+
+  // ===== IDENTITY CHECK =====
+  bool hasIdentity = RegExp(r"(name|faculty|employee)").hasMatch(text);
+  if (hasIdentity) score += 20;
+  else missing.add("Missing faculty/employee name");
+
+  // ===== APPROVAL/SIGNATURE CHECK =====
+  bool hasSignature = RegExp(r"(approved|checked by|property custodian|signature)").hasMatch(text);
+  if (hasSignature) score += 30;
+  else missing.add("Missing PMO approval or signature");
+
+  // ===== ZERO SCORE CASE =====
+  if (score == 0) {
+    return {
+      "score": 0,
+      "remark": "❗ Not readable as PMO Equipment/Asset Clearance.",
+      "missing": missing,
+    };
+  }
+
+  // ===== FINAL REMARK =====
+  String remark;
+  if (score >= 70) remark = "✅ Valid PMO Equipment Return Clearance";
+  else if (score >= 40) remark = "⚠ Partially Valid — Needs Review";
+  else remark = "❌ Incomplete Format";
+
+  return {"score": score, "remark": remark, "missing": missing};
+}
+
+// ====================== LABORATORY TOOLS RETURN VALIDATION ======================
+Map<String, dynamic> validateLabReturn(String text) {
+  text = text.toLowerCase();
+
+  int score = 0;
+  List<String> missing = [];
+
+  // ===== TITLE CHECK =====
+  bool hasTitle =
+      text.contains("laboratory") &&
+      (text.contains("tools") || text.contains("equipment")) &&
+      (text.contains("return") || text.contains("checklist"));
+
+  if (hasTitle) score += 25;
+  else missing.add("Missing Laboratory Tools Return title");
+
+  // ===== ITEM LIST CHECK =====
+  bool hasItems = RegExp(
+    r"(test tube|microscope|beaker|pipette|flask|experiment|lab|chemicals)"
+  ).hasMatch(text);
+
+  if (hasItems) score += 25;
+  else missing.add("Missing list of returned laboratory materials");
+
+  // ===== IDENTITY CHECK =====
+  bool hasIdentity = RegExp(r"(name|student|faculty|section)").hasMatch(text);
+  if (hasIdentity) score += 20;
+  else missing.add("Missing name/section/faculty identifier");
+
+  // ===== APPROVAL / VERIFIED CHECK =====
+  bool hasVerification = RegExp(
+    r"(checked by|verified by|laboratory custodian|lab technician|signature)"
+  ).hasMatch(text);
+
+  if (hasVerification) score += 30;
+  else missing.add("Missing laboratory staff verification");
+
+  // ===== ZERO SCORE CASE =====
+  if (score == 0) {
+    return {
+      "score": 0,
+      "remark": "❗ Not readable as Laboratory Tools Return Checklist.",
+      "missing": missing,
+    };
+  }
+
+  // ===== FINAL REMARK =====
+  String remark;
+  if (score >= 70) remark = "✅ Valid Laboratory Return Checklist";
+  else if (score >= 40) remark = "⚠ Partially Valid — Needs Review";
+  else remark = "❌ Incomplete Format";
+
+  return {"score": score, "remark": remark, "missing": missing};
+}
+
+// ====================== ICT DEVICE RETURN VALIDATION ======================
+Map<String, dynamic> validateICTReturn(String text) {
+  text = text.toLowerCase();
+
+  int score = 0;
+  List<String> missing = [];
+
+  // ===== TITLE CHECK =====
+  bool hasTitle =
+      text.contains("device return") ||
+      text.contains("laptop return") ||
+      text.contains("ict equipment") ||
+      text.contains("ict clearance");
+
+  if (hasTitle) score += 25;
+  else missing.add("Missing ICT Device/Laptop Return title");
+
+  // ===== DEVICE DETAILS CHECK (model, asset tag, serial, etc.) =====
+  bool hasDeviceDetails = RegExp(
+    r"(serial|asset|model|device|laptop|tablet|computer)"
+  ).hasMatch(text);
+
+  if (hasDeviceDetails) score += 25;
+  else missing.add("Missing device/equipment details");
+
+  // ===== FACULTY IDENTITY CHECK =====
+  bool hasIdentity = RegExp(r"(name|faculty|instructor|department)").hasMatch(text);
+  if (hasIdentity) score += 20;
+  else missing.add("Missing faculty name/department");
+
+    // ===== APPROVAL/VERIFIED CHECK =====
+    // Must show approver name (not just role like "ICT Staff")
+    bool hasVerification = RegExp(
+      r"(received by[: ]+[a-z])|(checked by[: ]+[a-z])|(verified by[: ]+[a-z])|(ict staff[: ]+[a-z])"
+    ).hasMatch(text);
+
+    if (hasVerification) score += 30;
+    else missing.add("Missing ICT approval with staff signature/name");
+
+  // ===== ZERO SCORE CASE =====
+  if (score == 0) {
+    return {
+      "score": 0,
+      "remark": "❗ Not readable as ICT Device Return Clearance.",
+      "missing": missing,
+    };
+  }
+
+  // ===== FINAL REMARK =====
+  String remark;
+  if (score >= 70) remark = "✅ Valid ICT Equipment Return";
+  else if (score >= 40) remark = "⚠ Partially Valid — Needs Review";
+  else remark = "❌ Incomplete Format";
+
+  return {"score": score, "remark": remark, "missing": missing};
+}
+
+// ====================== CESO PARTICIPATION VALIDATION ======================
+Map<String, dynamic> validateCESOCompletion(String text) {
+  text = text.toLowerCase();
+
+  int score = 0;
+  List<String> missing = [];
+
+  // ===== TITLE CHECK =====
+  bool hasTitle =
+      (text.contains("community extension") || text.contains("ceso")) &&
+      (text.contains("form") || text.contains("completion") || text.contains("participation"));
+
+  if (hasTitle) score += 30;
+  else missing.add("Missing CESO Form/Completion title");
+
+  // ===== FACULTY NAME CHECK =====
+  bool hasName = text.contains("name") || RegExp(r"(prof|mr\.|ms\.|dr\.)").hasMatch(text);
+  if (hasName) score += 15;
+  else missing.add("Missing faculty name section");
+
+  // ===== ACTIVITY / PROGRAM CHECK =====
+  bool hasActivity = RegExp(r"(activity|program|outreach|seminar|event)").hasMatch(text);
+  if (hasActivity) score += 25;
+  else missing.add("No community activity stated");
+
+  // ===== DATE CHECK =====
+  bool hasDate = RegExp(r"(date|issued|20[0-9]{2})").hasMatch(text);
+  if (hasDate) score += 15;
+  else missing.add("Missing issue/participation date");
+
+  // ===== APPROVAL CHECK =====
+    bool hasSignature = RegExp(r"(coordinator[: ]+[a-z])|(approved by[: ]+[a-z])").hasMatch(text);
+    if (hasSignature) score += 25;
+    else {
+      missing.add("Missing CESO approval / coordinator signature");
+      score -= 20; // ❗ Strong penalty
+    }
+
+  // ===== ZERO SCORE CASE =====
+  if (score == 0) {
+    return {
+      "score": 0,
+      "remark": "❗ Not readable as CESO Completion Form.",
+      "missing": missing,
+    };
+  }
+
+  // ===== FINAL REMARK =====
+  String remark;
+  if (score >= 70) remark = "✅ Valid CESO Completion Form";
+  else if (score >= 40) remark = "⚠ Partially Valid — Needs Review";
+  else remark = "❌ Incomplete Structure";
+
+  return {"score": score, "remark": remark, "missing": missing};
+}
+
+// ====================== PROGRAM CHAIR CLEARANCE VALIDATION ======================
+Map<String, dynamic> validateProgramChairClearance(String text) {
+  text = text.toLowerCase();
+
+  int score = 0;
+  List<String> missing = [];
+
+  // ===== NAME FILLED =====
+  bool nameFilled = RegExp(r"(name[: ]+[a-z])").hasMatch(text);
+  if (nameFilled) score += 25;
+  else missing.add("Name field seems incomplete");
+
+  // ===== DEPARTMENT FILLED =====
+  bool departmentFilled = RegExp(r"(department[: ]+[a-z])").hasMatch(text);
+  if (departmentFilled) score += 25;
+  else missing.add("Department field not properly filled");
+
+  // ===== LOAD / COMPLIANCE CHECK =====
+  // must detect a list with at least 3 subjects
+  List<String> detectedSubjects = RegExp(
+    r"(english|math|science|research|filipino|values|arts|pe|tourism|business|history)"
+  ).allMatches(text).map((m) => m.group(0)!).toList();
+
+  bool hasCompliance = detectedSubjects.length >= 3;
+
+  if (hasCompliance) score += 45; 
+  else missing.add("Teaching Load / Compliance details unclear or incomplete");
+
+  // ===== OPTIONAL APPROVAL (bonus only, not required) =====
+  bool hasApproval = RegExp(
+    r"(approved by|program chair|assistant principal|signature)"
+  ).hasMatch(text);
+
+  if (hasApproval) score += 5; 
+  // NO deduction if missing
+
+  // ===== REMARK =====
+  String remark;
+  if (score >= 70) remark = "✔ Likely acceptable — Complete Faculty Clearance";
+  else if (score >= 40) remark = "⚠ Needs review — Some missing details";
+  else remark = "❌ Low validity — Many fields incomplete";
+
+  return {
+    "score": score,
+    "remark": remark,
+    "missing": missing,
+  };
+}
 
 
   // ========================= OCR PROCESS =========================
@@ -252,7 +517,24 @@ Map<String, dynamic> validateBorrowedBooksSlip(String text) {
         resultCheck = validateLibraryClearance(extracted);
       } else if (selectedDocType == "Borrowed Books Return Slip") {
         resultCheck = validateBorrowedBooksSlip(extracted);
-      } else {
+      } 
+        else if (selectedDocType == "PMO Equipment Return") {
+        resultCheck = validateEquipmentReturn(extracted);
+      } 
+        else if (selectedDocType == "Laboratory Tools Return Checklist") {
+        resultCheck = validateLabReturn(extracted);
+      }
+        else if (selectedDocType == "ICT Device Return Slip") {
+        resultCheck = validateICTReturn(extracted);
+      }
+        else if (selectedDocType == "CESO Completion Form") {
+        resultCheck = validateCESOCompletion(extracted);
+      }
+        else if (selectedDocType == "Program Chair Clearance Form") {
+        resultCheck = validateProgramChairClearance(extracted);
+      }
+
+      else {
         resultCheck = {
           "score": 0,
           "remark": "❗ No validation rules for this document yet.",
@@ -357,7 +639,13 @@ Map<String, dynamic> validateBorrowedBooksSlip(String text) {
                 value: selectedDocType,
                 items: ["Financial Clearance",
                         "Library Clearance Form",
-                        "Borrowed Books Return Slip",]
+                        "Borrowed Books Return Slip",
+                        "PMO Equipment Return",
+                        "Laboratory Tools Return Checklist",
+                        "ICT Device Return Slip",
+                        "CESO Completion Form",
+                        "Program Chair Clearance Form",
+                         ]
                         .map((v) => DropdownMenuItem(value: v, child: Text(v))).toList(),
                 onChanged: (v)=> setState(() => selectedDocType = v!),
               ),

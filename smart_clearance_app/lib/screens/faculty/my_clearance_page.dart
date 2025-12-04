@@ -283,9 +283,16 @@ void loadData() async {
 
           const SizedBox(width:10),
           ElevatedButton(
-            onPressed:(){}, // submit req later
-            style:ElevatedButton.styleFrom(backgroundColor:Color(0xFF4FA3FF)),
-            child:const Text("Submit Requirements"),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => FacultyRequestDetailsPage(requestId: id!),
+                ),
+              );
+            },
+            style: ElevatedButton.styleFrom(backgroundColor: Color(0xFF4FA3FF)),
+            child: const Text("Submit Requirements"),
           ),
         ]),
 
